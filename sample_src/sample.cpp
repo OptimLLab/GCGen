@@ -11,12 +11,16 @@
 #include "OptSqConstrProblem.hpp"
 
 #include "Grishagin/grishagin_function.hpp"
+#include "Grishagin/nn_grishagin_function.hpp"
 #include "Grishagin/GrishaginProblemFamily.hpp"
+#include "Grishagin/NNGrishaginProblemFamily.hpp"
 #include "Grishagin/GrishaginConstrainedProblem.hpp"
 #include "Grishagin/GrishaginConstrainedProblemFamily.hpp"
 
 #include "GKLS/GKLSProblem.hpp"
+#include "GKLS/NNGKLSProblem.hpp"
 #include "GKLS/GKLSProblemFamily.hpp"
+#include "GKLS/NNGKLSProblemFamily.hpp"
 #include "GKLS/GKLSConstrainedProblem.hpp"
 #include "GKLS/GKLSConstrainedProblemFamily.hpp"
 
@@ -62,6 +66,20 @@ int main()
         << std::endl;
     }
 
+    TNNGKLSProblem nngkls;
+    cout << "\n Not Negative GKLS Problem 1" << std::endl;
+    cout << "NNGKLSProblem ( 0.5, 0.5 ) = " << nngkls.ComputeFunction({ 0.5, 0.5 }) << std::endl;
+    cout << "NNGKLSProblem Derivatives ( 0.5, 0.5 ) = {" <<
+        nngkls.ComputeFunctionDerivatives({ 0.5, 0.5 })[0] << ", " <<
+        nngkls.ComputeFunctionDerivatives({ 0.5, 0.5 })[1] << "}" << std::endl;
+    cout << std::endl;
+
+    TNNGKLSProblemFamily nngklsFam;
+    cout << "\n Not Negative GKLS Problem Family" << std::endl;
+    for (int i = 0; i < nngklsFam.GetFamilySize(); i++)
+        cout << "NNGKLSProblem [" << i + 1 << "] ( 0.5, 0.5 ) = " <<
+        nngklsFam[i]->ComputeFunction({ 0.5, 0.5 }) << std::endl;
+
     TGKLSConstrainedProblemFamily gklsConstFam;
     cout << "  GKLS Constrained Problem Family" << std::endl;
     for (int i = 0; i < gklsConstFam.GetFamilySize(); i++)
@@ -72,15 +90,29 @@ int main()
     cout << "  Grishagin Problem 1" << std::endl;
     cout << "GrishaginProblem ( 0.5, 0.5 ) = " << grish.ComputeFunction({ 0.5, 0.5 }) << std::endl;
     cout << "GrishaginProblem Derivatives ( 0.5, 0.5 ) = {" <<
-      grish.ComputeFunctionDerivatives({ 0.5, 0.5 })[0] << ", " <<
-      grish.ComputeFunctionDerivatives({ 0.5, 0.5 })[1] << "}" << std::endl;
+        grish.ComputeFunctionDerivatives({ 0.5, 0.5 })[0] << ", " <<
+        grish.ComputeFunctionDerivatives({ 0.5, 0.5 })[1] << "}" << std::endl;
     cout << std::endl;
 
     TGrishaginProblemFamily grishFam;
     cout << "  Grishagin Problem Family" << std::endl;
     for (int i = 0; i < grishFam.GetFamilySize(); i++)
-      cout << "GrishaginProblem [" << i + 1 << "] ( 0.5, 0.5 ) = " <<
-      grishFam[i]->ComputeFunction({ 0.5, 0.5 }) << std::endl;
+        cout << "GrishaginProblem [" << i + 1 << "] ( 0.5, 0.5 ) = " <<
+        grishFam[i]->ComputeFunction({ 0.5, 0.5 }) << std::endl;
+
+    TNNGrishaginProblem nngrish;
+    cout << " Not Negative Grishagin Problem 1" << std::endl;
+    cout << "Not Negative GrishaginProblem ( 0.5, 0.5 ) = " << nngrish.ComputeFunction({ 0.5, 0.5 }) << std::endl;
+    cout << "Not Negative GrishaginProblem Derivatives ( 0.5, 0.5 ) = {" <<
+      nngrish.ComputeFunctionDerivatives({ 0.5, 0.5 })[0] << ", " <<
+      nngrish.ComputeFunctionDerivatives({ 0.5, 0.5 })[1] << "}" << std::endl;
+    cout << std::endl;
+
+    TNNGrishaginProblemFamily nngrishFam;
+    cout << " Not Negative Grishagin Problem Family" << std::endl;
+    for (int i = 0; i < nngrishFam.GetFamilySize(); i++)
+      cout << "NNGrishaginProblem [" << i + 1 << "] ( 0.5, 0.5 ) = " <<
+      nngrishFam[i]->ComputeFunction({ 0.5, 0.5 }) << std::endl;
 
     {
       // create a problem with 30% fraction of feasible domain with respect to the whole search domain
