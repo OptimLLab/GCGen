@@ -65,6 +65,35 @@ TGKLSProblem::~TGKLSProblem()
 }
 
 // ------------------------------------------------------------------------------------------------
+std::vector<TGKLSLocalMinimum> TGKLSProblem::GetLocalMinima() const
+{
+  if (!option.isArgSet)
+    throw "GKLS function is not generated";
+
+  unsigned int i, j;
+  std::vector<TGKLSLocalMinimum> minima;
+  minima.reserve(option.GKLS_num_minima);
+
+  for (i = 0; i < option.GKLS_num_minima; i++)
+  {
+    TGKLSLocalMinimum minimum;
+    minimum.mPoint.assign(option.GKLS_minima.local_min[i],
+                          option.GKLS_minima.local_min[i] + mDimension);
+    minimum.mValue = Compute(0, minimum.mPoint);
+    minimum.mRadius = option.GKLS_minima.rho[i];
+    minimum.mIsGlobal = false;
+
+    for (j = 0; j < option.GKLS_glob.num_global_minima; j++)
+      if (option.GKLS_glob.gm_index[j] == i)
+        minimum.mIsGlobal = true;
+
+    minima.push_back(minimum);
+  }
+
+  return minima;
+}
+
+// ------------------------------------------------------------------------------------------------
 void TGKLSProblem::SetOptions()
 {
   if (option.mIsGeneratorMemoryAllocated)

@@ -42,6 +42,19 @@
 #include "IOptProblem.hpp"
 #include "GKLSOption.hpp"
 
+/// Local minimizer of a GKLS test function
+struct TGKLSLocalMinimum
+{
+  /// Coordinates of the minimizer
+  std::vector<double> mPoint;
+  /// Function value at mPoint (equal to ComputeFunction(mPoint))
+  double mValue;
+  /// Radius of the attraction region (a ball around mPoint)
+  double mRadius;
+  /// True if the minimizer is a global one
+  bool mIsGlobal;
+};
+
 class TGKLSProblem : public IOptProblem
 {
 protected:
@@ -73,4 +86,8 @@ public:
   TGKLSProblem(int problemIndex = 1, int dim = 2, GKLSClass type = Simple, GKLSFuncionType functionType = TD);
 
   ~TGKLSProblem();
+  /// Get all local minima of the function, including the global one
+  /// Element 0 is the vertex of the underlying paraboloid,
+  /// so mRadius[0] does not describe it
+  std::vector<TGKLSLocalMinimum> GetLocalMinima() const;
 };
